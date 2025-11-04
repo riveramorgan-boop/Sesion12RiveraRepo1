@@ -1,11 +1,11 @@
 <%-- 
-    Document   : index
-    Created on : 30/10/2025, 08:10:46 AM
+    Document   : editarAlumno
+    Created on : 4/11/2025, 08:27:19 AM
     Author     : Fenix
 --%>
 <html>
     <head>
-        <title>Pagina  Rivera Aplicacion WEB </title>
+        <title>Pagina Editar Usuario Rivera Aplicacion WEB </title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-----------------------------BOOTSTRAP----------------------------->
@@ -80,7 +80,11 @@
                         <!-- /MAIN HEADER -->
                 </header>
 <!-- /HEADER ------------------------------------------------------------------->
-
+<%-- 
+    Document   : nav
+    Created on : 19/04/2025, 05:37:52 PM
+    Author     : ttova
+--%>
 
 <!-- NAVIGATION ---------------------------------------------------------------->
                 <nav id="navigation">
@@ -111,55 +115,72 @@
                         <!-- /container -->
                 </nav>
 <!-- /NAVIGATION --------------------------------------------------------------->
+<%@include file="conexion.jsp"%>
+          <%
+            int id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
+            String usuario = request.getParameter("usuario");
+            String password = request.getParameter("password");
+        %>
+        
+        <!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <form method="post" action="editarAlumno.jsp">
+            <!-- row -->
+            <div class="row">
+                <!-- Order Details -->
+                <div class="col-md-4">
 
-<br>
-        <div class="container">
-            <center>
-             
-                <div class="thumbnail">
-                   
                 </div>
-                <h4>LISTA OFICIAL DE USARIOS DE SISTEMA RIVERA</h4>
-                <br>
-            </center>  
-                <%@include file="conexion.jsp"%><!--llamada ala conexion BD
-               
-                <div class="row col-md-12" >
-                <table class="table table-striped table-bordered table-hover" style="text-align: center">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center">ID</th>
-                            <th style="text-align: center">Usuario</th>
-                            <th style="text-align: center">Password</th>
-                           
-                            <th style="text-align: center">Operaciones</th>
-                            <th style="text-align: center">Operaciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                       
-                        <%
-                          st=conexion.prepareStatement("select * from tusuarios");
-                          rs=st.executeQuery();
-                          while(rs.next()){//inicia while
-                        %>  
-                        <tr>
-                            <td><%=rs.getString("id_usuario")%></td>
-                            <td><%=rs.getString("usuario")%></td>
-                            <td><%=rs.getString("password")%></td>
-                            
-                            <td><a class="btn btn-danger" href="eliminar.jsp?id_usuario=<%=rs.getString("id_usuario")%>">Eliminar</a></td>
-                            <td><a class="btn btn-info" href="editarAlumno.jsp id_usuario=<%= rs.getString(1)%>&usuario=<%= rs.getString(2)%>&password=<%= rs.getString(3)%>">Editar</a></td>
-                        </tr>
-                        <%
-                          }//termina while  
-                        %>
-                    </tbody>
-                </table>
+                <div class="col-md-4 order-details">
+                    <div class="section-title text-center">
+                        <a class="logo">
+                            <img src="./img/icon/inisesionalum2.jpg" alt="">
+                        </a>
+                        <br>
+                        <h3 class="title">Editar Alumno Rivera</h3>
+                    </div>
+                     <div class="form-group">
+                            <label for="usuario">Usuario modificar</label>
+                            <input type="text" class="form-control" id="usuario" value="<%= usuario%>" name="usuario" placeholder="usuario editar" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password Editar</label>
+                            <input type="text" class="form-control" id="password" value="<%= password%>"  name="password" placeholder="password editar" required="required">
+                        </div>
+                    <center><input type="submit" class="primary-btn order-submit" name="enviar" value="Editar"></center>
+                 <input type="hidden" name="id_usuario" value="<%= id_usuario%>" >
+                </div>
+                <!-- /Order Details -->
             </div>
-        </div>            
-                    
-    <center>  <h4>Fecha y hora del sistema : <%= new java.util.Date() %></h4></center>   
+            <!-- /row -->
+        </form>
+    </div>
+    <!-- /container -->
+    <div>
+        <p><center>¿Quieres cancelar? Presiona <a href="principal.jsp">Aquí</a></center></p>
+    </div>
+</div>
+<!-- /SECTION -->
+        
+        
+        
+    
+        <%
+            if (request.getParameter("enviar") != null) {
+                try {
+                   PreparedStatement ps;
+   ps =conexion.prepareStatement("update tusuarios set usuario='" + usuario + "', password='" + password + "' where id_usuario='"+id_usuario+"';");
+                         ps.executeUpdate();
+                        response.sendRedirect("index.jsp");        
+            //request.getRequestDispatcher("index.jsp").forward(request, response);
+               
+                } catch (Exception e) {
+                    out.print(e);
+                }
+            }
+        %>
 
 
 
